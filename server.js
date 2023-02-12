@@ -8,7 +8,7 @@ const studentrouter = require("./Routes/studentRouter");
 const app = express();
 dotenv.config();
 
-connectDB()
+
 app.use(cors())
 app.use(express.json())
 app.use("/",studentrouter)
@@ -17,5 +17,10 @@ app.get("/",(req,res)=>{
     res.json("api running")
 })
 
+const PORT = process.env.PORT || 5000
 
-app.listen(5000,()=> console.log("Server Is Running..."))   
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests"); 
+    }) 
+})

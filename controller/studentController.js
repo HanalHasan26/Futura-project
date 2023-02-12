@@ -8,11 +8,11 @@ const addStudents =asyncHandler(async(req,res)=>{
     try {
 
         if (!name || !phone) {
-            res.status(404).json("Please Enter All The Fields")
+            res.status(204).json("Please Enter All The Fields")
             throw new Error("Please Enter All The Feilds")
         }
 
-        const studentsDetails = Student.create({
+        const studentsDetails =await Student.create({
             name,
             phone
         })
@@ -35,8 +35,28 @@ const addStudents =asyncHandler(async(req,res)=>{
 
 })
 
-const test =(req,res)=>{
-    res.json("molakka my")
+
+const studentsDatas=async(req,res)=>{
+    try {
+        
+        const studentsData = await Student.find({})
+
+        if (studentsData) {
+            res.status(201).json(studentsData)
+        } else {
+            res.status(204).json({
+                message: "Datas not found",
+            }); 
+        }
+    } catch (error) {
+        res.status(400).json({
+            message: `can't fetch datas from database. Error:${error}`, 
+            isError:true,
+        }); 
+
+        throw new Error("Failed") 
+    }
+   
 }
 
-module.exports = {addStudents,test}
+module.exports = {addStudents,studentsDatas}
